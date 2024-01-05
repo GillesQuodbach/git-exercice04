@@ -164,13 +164,13 @@ public class GitExo04 {
 	}
 
 	// Méthode d'achat d'un produit
-	public static void buySomeThing(String productName, int quantityToBuy) {
+	public static void buySomeThing(String productName, double quantityToBuy) {
 
 		// Récupération des infos du produit
 		ArrayList<Object> inventoryValues = inventory.get(productName);
 
 		// Récupération du prix du produit et convertion en double
-		double productPrice = (int) inventoryValues.get(0);
+		double productPrice = (double) inventoryValues.get(1);
 //		System.out.println("product price double : " + productPrice); 
 
 		// Convertion quantité à acheter en double
@@ -182,9 +182,9 @@ public class GitExo04 {
 //		System.out.println("Prix total double : " + totalPrice); 
 
 		// Mise a jour de la quantité du stock
-		double actualQuantity = (double) inventoryValues.get(1);
+		double actualQuantity = (int) inventoryValues.get(0);
 //		System.out.println("Quantité actuelle : " + actualQuantity);
-		double updateQuantity = (double) actualQuantity - quantityToBuyDouble;
+		double updateQuantity =  actualQuantity - quantityToBuyDouble;
 //		System.out.println("Quantité mise a jour : " + updateQuantity);
 
 //		System.out.println("Before update" + inventoryValues);
@@ -213,11 +213,6 @@ public class GitExo04 {
 		// Remplissage de l'inventaire
 		allProductInventory();
 
-//		System.out.println("infos salsifis" + inventory.get("Salsifis"));
-//		buySomeThing("Salsifis", 4);
-//		System.out.println("infos salsifis" + inventory.get("Salsifis"));
-//		showInventory();
-
 		System.out.println("Bienvenue Au Bon Marché");
 		System.out.println("Client (1) ou Voir le bilan (2)");
 		int firstChoice = Integer.parseInt(scan.nextLine());
@@ -231,31 +226,34 @@ public class GitExo04 {
 			System.out.println(dayResume.get(clientLastName));
 			while (!rebuy) {
 				System.out.println("Que voulez vous acheter ?");
-				String clientProduct = scan.nextLine();
+				String clientProduct = scan.nextLine().toLowerCase();
 
 				ArrayList<Object> clientProductChoice = inventory.get(clientProduct);
-				System.out.println("clientProductChoice : " + clientProductChoice.get(0));
+				System.out.println("clientProductChoiceQuantityBefore : " + clientProductChoice.get(0));
 
-					System.out.println("Quel quantité ? " + "(" + clientProductChoice.get(2) + ")");
-					double clientQuantity = Integer.parseInt(scan.nextLine());
-					double actualProductStock = (int) clientProductChoice.get(0);
-					while (actualProductStock < clientQuantity) {
-						System.out.println("Stock insuffisant, veuillez modifier => Max:" + actualProductStock + "("
-								+ clientProductChoice.get(2) + ")");
-						clientQuantity = Integer.parseInt(scan.nextLine());
-					}
-					System.out.println("Ajouter un autre article ? Y/N");
-					String anotherArticle = scan.nextLine().toLowerCase();
-					 if (anotherArticle.equals("n")) {
-						rebuy = !rebuy;
-						System.out.println("Merci et a bientot");
-					}
+				System.out.println("Quel quantité ? " + "(" + clientProductChoice.get(2) + ")");
+				double clientQuantity = Integer.parseInt(scan.nextLine());
+				double actualProductStock = (int) clientProductChoice.get(0);
+				while (actualProductStock < clientQuantity) {
+					System.out.println("Stock insuffisant, veuillez modifier => Max:" + actualProductStock + "("
+							+ clientProductChoice.get(2) + ")");
+					clientQuantity = Integer.parseInt(scan.nextLine());
 				}
-
+				
+				buySomeThing(clientProduct,clientQuantity);
+				System.out.println("clientProductChoiceQuantityAfter : " + clientProductChoice.get(0));
+				System.out.println("Ajouter un autre article ? Y/N");
+				String anotherArticle = scan.nextLine().toLowerCase();
+				if (anotherArticle.equals("n")) {
+					rebuy = !rebuy;
+					System.out.println("Merci et a bientot");
+				}
 			}
 
-			// si choix 2
-		 else if (firstChoice == 2) {
+		}
+
+		// si choix 2
+		else if (firstChoice == 2) {
 			showStock();
 		}
 
